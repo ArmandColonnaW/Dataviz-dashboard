@@ -76,5 +76,3 @@ st.divider()
 section_deep_dives(df)
 st.divider()
 section_conclusion(df_raw)
-
-st.caption("© Student project — IRVE Data Storytelling — Streamlit")
