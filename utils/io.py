@@ -2,17 +2,25 @@ import os
 import pandas as pd
 import streamlit as st
 
+# URL officielle du jeu de données IRVE consolidé (Etalab)
+DATA_URL = "https://www.data.gouv.fr/api/1/datasets/r/eb76d20a-8501-400e-b336-d85724de5435"
+
 @st.cache_data(show_spinner=True)
 def load_data() -> pd.DataFrame:
     """
-    Automatically loads the IRVE CSV file located in the /data folder.
-    No other loading method is allowed.
+    Load the IRVE dataset directly from the official data.gouv.fr API link.
+
+    - The file is downloaded and cached automatically (Streamlit handles it).
+    - No manual upload or local file required.
+    - Data is read directly into a pandas DataFrame.
     """
-    csv_path = "data/consolidation-etalab-schema-irve-statique-v-2.3.1-20251024.csv"
+    try:
+        st.info("Fetching dataset from data.gouv.fr...")
+        df = pd.read_csv(DATA_URL, sep=",")
+        st.success("Dataset successfully loaded from the online source.")
+        return df
 
-    if not os.path.exists(csv_path):
-        st.error(f"File not found: {csv_path}")
+    except Exception as e:
+        st.error("Failed to load dataset from the remote link.")
+        st.exception(e)
         st.stop()
-
-    df = pd.read_csv(csv_path)
-    return df
